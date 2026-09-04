@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>راهنمای فنی برش لیزر فایبر</title>
+<meta name="theme-color" content="#0f1113">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="راهنمای لیزر">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f1113'/%3E%3Cpath d='M20 70 L50 20 L80 70 Z' fill='none' stroke='%23ffb400' stroke-width='6'/%3E%3Ccircle cx='50' cy='58' r='5' fill='%23ffb400'/%3E%3Crect x='47' y='38' width='6' height='14' fill='%23ffb400'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f1113'/%3E%3Cpath d='M20 74 L50 18 L80 74 Z' fill='none' stroke='%23ffb400' stroke-width='7'/%3E%3Ccircle cx='50' cy='58' r='6' fill='%23ffb400'/%3E%3Crect x='46' y='36' width='8' height='16' fill='%23ffb400'/%3E%3C/svg%3E">
+
+<style>
+  :root{
+    --bg:#0f1113;
+    --surface:#1a1d20;
+    --surface-2:#212529;
+    --border:#2c3136;
+    --text:#eae7e0;
+    --muted:#9aa0a6;
+    --amber:#ffb400;
+    --amber-dim:#8a6a1a;
+    --danger:#ff5a4e;
+    --ok:#4caf6e;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", "Vazirmatn", "IRANSansX", Tahoma, system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  ::selection{background:var(--amber);color:#14161a;}
+
+  /* Hazard stripe bar */
+  .hazard{
+    height:6px;
+    width:100%;
+    background-image:repeating-linear-gradient(135deg, var(--amber) 0 14px, #14161a 14px 28px);
+  }
+
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:rgba(15,17,19,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .top-inner{
+    padding:14px 16px 12px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand svg{flex:0 0 auto;}
+  .brand h1{
+    font-size:16px; margin:0; font-weight:800; letter-spacing:.3px;
+  }
+  .brand small{
+    display:block; color:var(--muted); font-size:11px; font-weight:400; margin-top:2px;
+  }
+  .search-wrap{position:relative;}
+  .search-wrap input{
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:10px;
+    padding:11px 14px;
+    font-size:14px;
+    font-family:var(--sans);
+    outline:none;
+  }
+  .search-wrap input:focus{border-color:var(--amber);}
+  .search-wrap input::placeholder{color:var(--muted);}
+
+  nav.toc{
+    display:flex; gap:8px; overflow-x:auto; padding:2px 16px 12px;
+    scrollbar-width:none;
+  }
+  nav.toc::-webkit-scrollbar{display:none;}
+  nav.toc a{
+    flex:0 0 auto;
+    font-size:12px;
+    color:var(--muted);
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:7px 12px;
+    border-radius:999px;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  nav.toc a.active, nav.toc a:active{
+    color:#14161a;
+    background:var(--amber);
+    border-color:var(--amber);
+    font-weight:700;
+  }
+
+  main{max-width:780px; margin:0 auto; padding:18px 16px 40px;}
+
+  .lead{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:22px;
+    font-size:13.5px;
+    color:var(--muted);
+  }
+  .lead b{color:var(--text);}
+
+  section.sec{
+    margin-bottom:14px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:var(--surface);
+    overflow:hidden;
+    scroll-margin-top:118px;
+  }
+  .sec > .sec-head{
+    display:flex; align-items:center; gap:12px;
+    padding:16px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .sec-num{
+    flex:0 0 auto;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#14161a;
+    background:var(--amber);
+    padding:4px 8px;
+    border-radius:6px;
+    font-weight:700;
+    letter-spacing:.5px;
+  }
+  .sec-head h2{
+    flex:1;
+    margin:0;
+    font-size:15.5px;
+    font-weight:800;
+  }
+  .chev{
+    flex:0 0 auto;
+    color:var(--muted);
+    transition:transform .25s ease;
+    font-size:14px;
+  }
+  .sec.open .chev{transform:rotate(180deg);}
+  .sec-body{
+    display:none;
+    padding:0 16px 18px;
+    border-top:1px solid var(--border);
+  }
+  .sec.open .sec-body{display:block; padding-top:14px;}
+
+  h3.sub{
+    font-size:13.5px;
+    color:var(--amber);
+    margin:20px 0 8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  h3.sub:first-child{margin-top:4px;}
+  h3.sub .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:0 0 auto;}
+
+  h4.part{
+    font-size:13px;
+    color:var(--text);
+    background:var(--surface-2);
+    border-right:3px solid var(--amber-dim);
+    padding:8px 10px;
+    border-radius:6px;
+    margin:14px 0 8px;
+  }
+
+  p{font-size:13.5px; margin:8px 0; color:#d7d4cd;}
+  ul{margin:6px 0; padding-inline-start:20px;}
+  li{font-size:13.5px; margin:5px 0; color:#d7d4cd;}
+  li b, p b{color:var(--text);}
+
+  .kv{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    margin:10px 0;
+  }
+  .card{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    margin:10px 0;
+  }
+  .card .tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--danger);
+    border:1px solid var(--danger);
+    padding:2px 8px;
+    border-radius:999px;
+    margin-bottom:8px;
+  }
+  .card.ok .tag{color:var(--ok); border-color:var(--ok);}
+  .card p{margin:4px 0;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:12.5px;
+  }
+  thead th{
+    background-image:repeating-linear-gradient(135deg, var(--amber-dim) 0 8px, #14161a 8px 16px);
+    color:#14161a;
+    background-color:var(--amber);
+    padding:8px 10px;
+    text-align:right;
+    font-weight:800;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border);
+    color:#d7d4cd;
+    vertical-align:top;
+  }
+  tbody tr:nth-child(even){background:rgba(255,255,255,0.02);}
+
+  .brand-block{
+    margin-top:10px;
+    padding:12px;
+    border:1px dashed var(--border);
+    border-radius:10px;
+  }
+  .brand-block h5{
+    margin:0 0 8px;
+    font-size:13px;
+    color:var(--amber);
+  }
+
+  footer{
+    max-width:780px; margin:0 auto; padding:20px 16px 40px;
+    color:var(--muted); font-size:11.5px; text-align:center;
+  }
+
+  .fab{
+    position:fixed; bottom:18px; left:18px;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--amber); color:#14161a;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:900;
+    border:none; box-shadow:0 4px 14px rgba(0,0,0,.4);
+    z-index:60;
+  }
+
+  mark{
+    background:var(--amber);
+    color:#14161a;
+    border-radius:3px;
+    padding:0 2px;
+  }
+
+  .hidden{display:none !important;}
+  .no-results{
+    text-align:center; color:var(--muted); font-size:13px; padding:40px 10px;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="hazard"></div>
+  <div class="top-inner">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 100 100"><path d="M20 74 L50 18 L80 74 Z" fill="none" stroke="#ffb400" stroke-width="7"/><circle cx="50" cy="58" r="6" fill="#ffb400"/><rect x="46" y="36" width="8" height="16" fill="#ffb400"/></svg>
+      <div>
+        <h1>راهنمای فنی برش لیزر فایبر</h1>
+        <small>قطعه‌شناسی، خطاها و رفع عیب — نسخه آفلاین</small>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input id="q" type="text" placeholder="جستجو در راهنما… مثلاً: BCS100، نازل، چیلر" autocomplete="off">
+    </div>
+  </div>
+  <nav class="toc" id="toc"></nav>
+</header>
+
+<main id="main">
+  <div class="lead">
+    این راهنما به‌صورت کامل و <b>آفلاین</b> روی گوشی شما ذخیره شده و نیازی به اینترنت ندارد. از نوار جستجو برای پیدا کردن سریع یک قطعه یا خطا استفاده کنید، یا روی هر بخش ضربه بزنید تا باز شود.
+  </div>
+
+  <section class="sec" id="s1" data-title="آشنایی کلی با دستگاه">
+    <div class="sec-head">
+      <span class="sec-num">۰۱</span>
+      <h2>آشنایی کلی با دستگاه برش لیزر فایبر</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+      <p>دستگاه برش لیزر فایبر از ترکیب چند زیرسیستم اصلی تشکیل شده است:</p>
+      <ul>
+        <li><b>منبع لیزر (Laser Source):</b> تولید پرتو لیزر</li>
+        <li><b>مسیر انتقال نور:</b> فیبر نوری تا هد برش</li>
+        <li><b>هد برش (Cutting Head):</b> فوکوس و هدایت پرتو روی فلز</li>
+        <li><b>سیستم حرکتی (CNC Motion):</b> جابجایی هد در محورهای X، Y، Z</li>
+        <li><b>سیستم کنترل (Controller):</b> مغز متفکر دستگاه</li>
+        <li><b>سیستم برق و پاور:</b> تغذیه تمام بخش‌ها</li>
+        <li><b>سیستم گاز کمکی:</b> اکسیژن، نیتروژن، هوا</li>
+        <li><b>سیستم خنک‌کننده (چیلر):</b> خنک نگه‌داشتن منبع لیزر و هد</li>
+        <li><b>سیستم تهویه و مکش دود</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="s2" data-title="قطعه‌شناسی کامل">
+    <div class="sec-head">
+      <span class="sec-num">۰۲</span>
+      <h2>قطعه‌شناسی کامل و کاربرد هر قطعه</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+
+      <h3 class="sub"><span class="dot"></span>۲.۱ منبع لیزر (Laser Source)</h3>
+      <p>برندهای رایج: IPG، Raycus، MAX Photonics، JPT، Chuangxin (CX)</p>
+      <ul>
+        <li><b>دیودهای پمپ (Pump Diodes/LD):</b> تبدیل انرژی الکتریکی به نور لیزری اولیه؛ قلب و گران‌ترین قطعه منبع لیزر.</li>
+        <li><b>فیبر فعال (Active Fiber):</b> تقویت نور تولیدشده توسط دیودها.</li>
+        <li><b>کمبینر (Combiner):</b> ترکیب خروجی چند دیود پمپ در یک مسیر نوری.</li>
+        <li><b>ایزولاتور نوری (Isolator):</b> جلوگیری از بازگشت نور به سمت دیودها.</li>
+        <li><b>QBH Connector:</b> کانکتور خروجی نوری استاندارد بین منبع لیزر و فیبر انتقال.</li>
+        <li><b>برد کنترل داخلی:</b> کنترل توان خروجی، دما و ارتباط با CNC.</li>
+        <li><b>فن‌ها و رادیاتور داخلی:</b> خنک‌سازی کمکی دیودها.</li>
+        <li><b>پورت‌های ارتباطی (RS232/Ethernet/IO):</b> ارتباط با کنترلر CNC.</li>
+      </ul>
+      <p>تولید پرتو با طول موج حدود ۱۰۶۴ نانومتر و توانی از ۵۰۰ وات تا بیش از ۳۰ کیلووات بسته به مدل.</p>
+
+      <h3 class="sub"><span class="dot"></span>۲.۲ فیبر انتقال (Transport Fiber)</h3>
+      <p>پرتو تولیدشده را به سمت هد برش هدایت می‌کند. دارای غلاف محافظ و کانکتور QBH در دو سر. نباید خم تند داشته باشد؛ در غیر این‌صورت افت توان و آسیب فیبر رخ می‌دهد.</p>
+
+      <h3 class="sub"><span class="dot"></span>۲.۳ هد برش (Cutting Head)</h3>
+      <ul>
+        <li><b>کانکتور QD/QBH ورودی:</b> اتصال فیبر به هد.</li>
+        <li><b>کلیمیتور (Collimator):</b> موازی‌سازی پرتو واگرا از فیبر.</li>
+        <li><b>لنز کالیمیشن:</b> عدسی داخل کلیمیتور.</li>
+        <li><b>لنز فوکوس:</b> متمرکز کردن پرتو روی فلز؛ فاصله کانونی معمولاً ۱۲۷ یا ۱۵۰ میلی‌متر.</li>
+        <li><b>شیشه محافظ (Protective Window):</b> محافظت لنز فوکوس در برابر پاشش مذاب؛ مصرفی‌ترین قطعه نوری.</li>
+        <li><b>نازل (Nozzle):</b> خروجی و تمرکز گاز کمکی حول نقطه برش.</li>
+        <li><b>رینگ سرامیکی (Ceramic Ring):</b> حسگر تشخیص برخورد/اتصال کوتاه بین نازل و ورق.</li>
+        <li><b>سنسور خازنی ارتفاع (BCS):</b> اندازه‌گیری فاصله نازل تا ورق.</li>
+        <li><b>موتور فوکوس:</b> تنظیم خودکار نقطه فوکوس در راستای Z.</li>
+      </ul>
+
+      <h3 class="sub"><span class="dot"></span>۲.۴ سیستم کنترل ارتفاع (BCS100)</h3>
+      <ul>
+        <li><b>برد BCS:</b> پردازش سیگنال خازنی و فرمان به درایور محور Z.</li>
+        <li><b>کابل شیلددار BCS:</b> انتقال سیگنال ضعیف خازنی؛ حساس به نویز و پارگی شیلد.</li>
+      </ul>
+      <p>کاربرد: حفظ فاصله ثابت نازل تا ورق حتی در سطوح ناهموار برای کیفیت برش یکنواخت.</p>
+
+      <h3 class="sub"><span class="dot"></span>۲.۵ سیستم حرکتی (Motion System)</h3>
+      <ul>
+        <li><b>موتور سروو/استپر:</b> حرکت محورهای X، Y، Z.</li>
+        <li><b>درایور سروو/استپر:</b> کنترل جریان و سرعت موتور.</li>
+        <li><b>گیربکس سیاره‌ای:</b> افزایش گشتاور و دقت انتقال حرکت.</li>
+        <li><b>ریل و بلبرینگ خطی:</b> هدایت دقیق حرکت خطی.</li>
+        <li><b>رک و پینیون / بال اسکرو:</b> انتقال حرکت چرخشی به خطی.</li>
+        <li><b>کوپلینگ:</b> اتصال شفت موتور به بال اسکرو.</li>
+        <li><b>لیمیت سوییچ:</b> تعیین محدوده مجاز حرکت.</li>
+        <li><b>سنسور هوم:</b> تعیین نقطه صفر مبدأ.</li>
+        <li><b>انکودر:</b> بازخورد موقعیت دقیق موتور.</li>
+        <li><b>کابل زنجیری (Drag Chain):</b> محافظت از کابل‌ها هنگام حرکت.</li>
+        <li><b>بلوز محافظ:</b> پوشش ریل‌ها در برابر گرد و غبار و جرقه.</li>
+      </ul>
+
+      <h3 class="sub"><span class="dot"></span>۲.۶ سیستم کنترل CNC</h3>
+      <p>برندهای رایج: Cypcut (Friendess)، FSCUT، Weihong</p>
+      <ul>
+        <li><b>برد کنترلر اصلی:</b> پردازش G-code و ارسال فرمان به درایورها.</li>
+        <li><b>پنل اپراتور (Handbox/HMI):</b> صفحه لمسی تنظیم پارامترها.</li>
+        <li><b>کارت IO:</b> ارتباط با سنسورها، شیرها و رله‌ها.</li>
+        <li><b>پورت USB/شبکه:</b> انتقال فایل برش.</li>
+      </ul>
+
+      <h3 class="sub"><span class="dot"></span>۲.۷ سیستم برق و پاور</h3>
+      <ul>
+        <li><b>کنتاکتور:</b> قطع و وصل مدارهای قدرت.</li>
+        <li><b>رله:</b> کلیدزنی سیگنال‌های کنترلی.</li>
+        <li><b>بریکر (MCB/MCCB):</b> محافظت در برابر اتصال کوتاه.</li>
+        <li><b>ترانسفورماتور کنترل:</b> تامین ولتاژهای کمکی.</li>
+        <li><b>منبع تغذیه سوییچینگ:</b> تامین ۲۴ ولت DC.</li>
+        <li><b>دکمه توقف اضطراری (E-Stop)</b></li>
+        <li><b>فیلتر نویز (EMI Filter)</b></li>
+      </ul>
+
+      <h3 class="sub"><span class="dot"></span>۲.۸ سیستم خنک‌کننده (چیلر)</h3>
+      <ul>
+        <li><b>کمپرسور چیلر:</b> چرخش مبرد برای خنک‌سازی آب.</li>
+        <li><b>پمپ گردش آب:</b> چرخش آب مقطر بین چیلر، منبع لیزر و هد.</li>
+        <li><b>مبدل حرارتی:</b> انتقال گرما از آب به مبرد.</li>
+        <li><b>فلوسوییچ و سنسور دما:</b> قطع دستگاه در صورت افت دبی یا افزایش دما.</li>
+        <li><b>مخزن و فیلتر آب</b></li>
+        <li><b>رادیاتور و فن چیلر</b></li>
+      </ul>
+      <p>دمای مجاز معمولاً ۲۰ تا ۲۵ درجه سانتی‌گراد؛ نوسان دما مستقیم روی عمر و توان خروجی لیزر اثر می‌گذارد.</p>
+
+      <h3 class="sub"><span class="dot"></span>۲.۹ سیستم گاز کمکی</h3>
+      <ul>
+        <li><b>کپسول/مخزن اکسیژن، نیتروژن، هوای فشرده</b></li>
+        <li><b>رگولاتور فشار</b></li>
+        <li><b>شیر برقی (Solenoid Valve)</b></li>
+        <li><b>فیلتر و رطوبت‌گیر گاز</b></li>
+        <li><b>کمپرسور هوا و درایر</b></li>
+        <li><b>پروانه انتخاب گاز</b></li>
+      </ul>
+      <p>اکسیژن برای ورق ضخیم فولادی، نیتروژن برای استیل و آلومینیوم بدون اکسیداسیون، هوا برای ضخامت‌های کم.</p>
+
+      <h3 class="sub"><span class="dot"></span>۲.۱۰ سیستم تهویه و مکش دود</h3>
+      <ul>
+        <li><b>فن مکش صنعتی</b></li>
+        <li><b>فیلتر دود و ذرات</b></li>
+        <li><b>کانال‌کشی و دریچه‌های مکش</b></li>
+      </ul>
+
+      <h3 class="sub"><span class="dot"></span>۲.۱۱ میز کار</h3>
+      <ul>
+        <li><b>میز تیغه‌ای:</b> نگه‌داشتن ورق و عبور جرقه.</li>
+        <li><b>میز شاتل:</b> بارگذاری همزمان با برش.</li>
+        <li><b>سیستم بالابر میز</b> (در مدل‌های بزرگ)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="s3" data-title="خطاهای رایج و رفع عیب">
+    <div class="sec-head">
+      <span class="sec-num">۰۳</span>
+      <h2>خطاهای رایج و رفع عیب</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+
+      <h3 class="sub"><span class="dot"></span>۳.۱ خطاهای منبع لیزر</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>لیزر روشن نمی‌شود / توان خروجی صفر است</b></p>
+        <ul>
+          <li>بررسی اتصال کابل بین منبع لیزر و CNC</li>
+          <li>بررسی Emergency Stop (نباید فعال باشد)</li>
+          <li>بررسی Interlock (درب باز یا سیم قطع)</li>
+          <li>بررسی دمای چیلر</li>
+          <li>بررسی فلوسوییچ آب</li>
+          <li>کد خطای نمایشگر را با دفترچه برند تطبیق دهید</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>توان خروجی کمتر از حد نامی است</b></p>
+        <ul>
+          <li>کثیفی یا آسیب شیشه محافظ هد (رایج‌ترین علت)</li>
+          <li>خم‌شدگی/آسیب فیبر انتقال</li>
+          <li>کثیفی کانکتور QBH</li>
+          <li>افت عملکرد دیودهای پمپ (فرسودگی)</li>
+          <li>تنظیم نادرست پارامتر توان در نرم‌افزار</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>قطع ناگهانی حین کار</b></p>
+        <ul>
+          <li>Over-temperature به دلیل ضعف چیلر</li>
+          <li>افت ولتاژ یا نویز برق شهر</li>
+          <li>خطای ارتباطی (Communication Error) با CNC</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="dot"></span>۳.۲ خطاهای چیلر</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>Low Flow / فلوسوییچ فعال می‌شود</b></p>
+        <ul>
+          <li>کمبود آب در مخزن</li>
+          <li>گرفتگی فیلتر یا شیلنگ</li>
+          <li>هوا در مسیر گردش آب</li>
+          <li>خرابی پمپ گردش آب</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>دمای آب بالا می‌رود</b></p>
+        <ul>
+          <li>کثیفی رادیاتور/کندانسور چیلر</li>
+          <li>خرابی کمپرسور یا افت گاز مبرد</li>
+          <li>دمای محیط بالا و تهویه ناکافی</li>
+          <li>فن چیلر خراب یا کثیف</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>نوسان دما</b></p>
+        <ul>
+          <li>ترموستات یا سنسور دما خراب</li>
+          <li>چیلر زیرظرفیت نسبت به توان منبع لیزر</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="dot"></span>۳.۳ خطاهای هد برش و سنسور ارتفاع (BCS)</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>آلارم BCS / نوسان ارتفاع هد</b></p>
+        <ul>
+          <li>کثیفی یا رطوبت روی نازل و رینگ سرامیکی</li>
+          <li>آسیب یا پارگی شیلد کابل BCS</li>
+          <li>عدم اتصال زمین صحیح دستگاه</li>
+          <li>نازل کج یا آسیب‌دیده</li>
+          <li>نیاز به کالیبراسیون مجدد BCS</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>خطای برخورد هد (Collision Alarm)</b></p>
+        <ul>
+          <li>تاب‌برداشتن ورق و برخورد با نازل</li>
+          <li>سرعت حرکت Z بیش از حد بالا</li>
+          <li>رینگ سرامیکی ترک‌خورده یا معیوب</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>کیفیت برش ضعیف با تنظیمات درست</b></p>
+        <ul>
+          <li>شیشه محافظ کثیف یا سوخته — نیاز به تعویض</li>
+          <li>لنز فوکوس آلوده یا خط‌دار</li>
+          <li>نازل ساییده یا سوراخ نامنظم</li>
+          <li>عدم هم‌مرکزی نازل با پرتو (Nozzle Centering)</li>
+          <li>فاصله فوکوس اشتباه</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>نشتی گاز از هد</b></p>
+        <ul>
+          <li>اورینگ داخل هد فرسوده یا پاره</li>
+          <li>اتصالات شیلنگ گاز شل</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="dot"></span>۳.۴ خطاهای سیستم حرکتی</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>آلارم سروو (Overcurrent/Overload)</b></p>
+        <ul>
+          <li>گیر کردن مکانیکی محور (ریل/بلبرینگ)</li>
+          <li>کوپلینگ شل یا شکسته</li>
+          <li>تنظیم نادرست پارامتر PID درایور</li>
+          <li>کابل انکودر آسیب‌دیده یا شل</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>از دست دادن موقعیت / عدم دقت ابعادی</b></p>
+        <ul>
+          <li>کمبود روانکاری ریل‌ها و بال اسکرو</li>
+          <li>شل بودن پیچ‌های رک یا بال اسکرو</li>
+          <li>سرعت/شتاب بیش از توان مکانیکی</li>
+          <li>فرسودگی بلبرینگ خطی</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>خطای Home/Origin پیدا نمی‌شود</b></p>
+        <ul>
+          <li>سنسور هوم کثیف یا خراب</li>
+          <li>کابل سنسور قطع</li>
+          <li>تنظیم نادرست موقعیت فیزیکی سنسور</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="dot"></span>۳.۵ خطاهای سیستم گاز</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>افت فشار گاز حین برش</b></p>
+        <ul>
+          <li>گرفتگی فیلتر گاز یا نازل</li>
+          <li>شیر برقی نیمه‌باز یا معیوب</li>
+          <li>افت فشار یا خالی بودن کپسول</li>
+          <li>نشتی در لوله‌کشی</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>عدم تعویض خودکار نوع گاز</b></p>
+        <ul>
+          <li>خرابی شیر برقی انتخاب گاز</li>
+          <li>تنظیم اشتباه نوع گاز در نرم‌افزار</li>
+        </ul>
+      </div>
+
+      <h3 class="sub"><span class="dot"></span>۳.۶ خطاهای برق و کنترلر</h3>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>قطع و وصل ناگهانی کل دستگاه</b></p>
+        <ul>
+          <li>شل/اکسید شدن اتصالات کنتاکتور اصلی</li>
+          <li>نویز برق شهر یا زمین نامناسب</li>
+          <li>خرابی منبع تغذیه ۲۴ ولت</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>کنترلر (Handbox) روشن نمی‌شود یا هنگ می‌کند</b></p>
+        <ul>
+          <li>خرابی کابل ارتباطی Handbox و Main Card</li>
+          <li>خرابی منبع تغذیه کنترلر</li>
+          <li>نیاز به آپدیت یا ری‌استور نرم‌افزار</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">علامت</span>
+        <p><b>خطای ارتباطی بین درایورها و کنترلر</b></p>
+        <ul>
+          <li>کابل شبکه/EtherCAT آسیب‌دیده یا شل</li>
+          <li>نویز الکترومغناطیسی از کابل‌کشی نامناسب</li>
+          <li>عدم تطابق آدرس‌دهی درایورها</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="s4" data-title="مشکلات کیفیت برش">
+    <div class="sec-head">
+      <span class="sec-num">۰۴</span>
+      <h2>مشکلات کیفیت برش و علل تخصصی</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+      <table>
+        <thead><tr><th>مشکل</th><th>علت احتمالی</th></tr></thead>
+        <tbody>
+          <tr><td>خط زبری (Dross) در لبه پایین</td><td>فشار گاز کم، فوکوس نادرست، سرعت نامناسب، نازل ساییده</td></tr>
+          <tr><td>برش ناقص</td><td>توان ناکافی، سرعت بالا، فوکوس اشتباه، آلودگی لنز</td></tr>
+          <tr><td>زاویه‌دار شدن برش (Taper)</td><td>عدم هم‌مرکزی نازل، فوکوس نادرست، سایش لنز</td></tr>
+          <tr><td>رنگ تیره در لبه (برش نیتروژن)</td><td>خلوص پایین نیتروژن، فشار ناکافی، نشتی گاز</td></tr>
+          <tr><td>سوراخ‌شدگی نامنظم شروع برش</td><td>تنظیم نادرست Piercing، فوکوس اشتباه</td></tr>
+          <tr><td>خط‌های موجی روی سطح</td><td>نوسان سرعت محورها، لقی مکانیکی، شتاب نادرست</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="s5" data-title="نگهداری پیشگیرانه">
+    <div class="sec-head">
+      <span class="sec-num">۰۵</span>
+      <h2>نگهداری پیشگیرانه (سرویس دوره‌ای)</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+      <h4 class="part">روزانه</h4>
+      <ul>
+        <li>بازدید و تمیزکاری نازل و رینگ سرامیکی</li>
+        <li>بررسی فشار گاز و سطح آب چیلر</li>
+        <li>بازرسی شیشه محافظ از نظر آلودگی</li>
+      </ul>
+      <h4 class="part">هفتگی</h4>
+      <ul>
+        <li>روانکاری ریل‌های خطی و بال اسکرو</li>
+        <li>تمیزکاری فیلتر هوا/گاز</li>
+        <li>بررسی کشش تسمه‌ها</li>
+      </ul>
+      <h4 class="part">ماهانه</h4>
+      <ul>
+        <li>تعویض آب مقطر چیلر و بررسی کیفیت آن</li>
+        <li>تمیزکاری رادیاتور چیلر</li>
+        <li>بررسی سفتی اتصالات الکتریکی</li>
+        <li>کالیبراسیون سنسور ارتفاع BCS</li>
+      </ul>
+      <h4 class="part">سالانه</h4>
+      <ul>
+        <li>بررسی عمر و بازده دیودهای پمپ توسط متخصص</li>
+        <li>بازرسی کامل سیستم گاز و شیرهای برقی</li>
+        <li>بررسی و تنظیم پارامترهای PID سروو موتورها</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="s6" data-title="نکات ایمنی">
+    <div class="sec-head">
+      <span class="sec-num">۰۶</span>
+      <h2>نکات ایمنی مهم</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+      <div class="card">
+        <span class="tag">خطر</span>
+        <ul>
+          <li>هرگز مستقیم به پرتو لیزر یا انعکاس آن نگاه نکنید</li>
+          <li>از عینک ایمنی مخصوص لیزر فایبر استفاده کنید</li>
+          <li>قبل از تعمیر داخل هد یا کابینت برق، دستگاه را کاملاً از برق جدا کنید</li>
+          <li>کپسول‌های گاز (به‌ویژه اکسیژن) را دور از منابع حرارتی و جرقه نگه دارید</li>
+          <li>سیستم تهویه را همیشه فعال نگه دارید</li>
+          <li>اتصال زمین باید توسط برق‌کار متخصص و طبق استاندارد انجام شود</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="s7" data-title="مرجع سریع برندها">
+    <div class="sec-head">
+      <span class="sec-num">۰۷</span>
+      <h2>خلاصه کدهای خطا و راهنمای برندهای معروف</h2>
+      <span class="chev">▾</span>
+    </div>
+    <div class="sec-body">
+      <p>دفترچه راهنمای رسمی هر برند، سند اختصاصی و دارای حق مالکیت همان شرکت است. آنچه در ادامه آمده خلاصه‌ای عملی و بازنویسی‌شده از رایج‌ترین هشدارها بر پایه مستندات فنی عمومی است. برای اطلاعات کامل، نسخه اصلی دفترچه مدل خودتان را از سایت رسمی سازنده تهیه کنید.</p>
+
+      <div class="brand-block">
+        <h5>IPG Photonics (سری YLR/YLS)</h5>
+        <ul>
+          <li><b>Interlock / درب باز:</b> مدار ایمنی قطع شده؛ اتصال سیم و درب‌ها را بررسی کنید</li>
+          <li><b>Low Water Flow:</b> فیلتر یا شیلنگ آب گرفته؛ فیلتر ورودی را تمیز کنید</li>
+          <li><b>High Back Reflection:</b> بازتاب زیاد از سطح فلز؛ لنز و فوکوس را بررسی کنید</li>
+          <li><b>Laser Module Disconnected / Coupler Failure:</b> قطعی فیبر یا کانکتور QBH</li>
+          <li><b>Critical Error:</b> نیاز به خواندن کد ماژول (RMEC) و تماس با پشتیبانی IPG</li>
+          <li><b>Power Supply Failure:</b> خرابی بورد تغذیه داخلی</li>
+        </ul>
+      </div>
+
+      <div class="brand-block">
+        <h5>Raycus</h5>
+        <ul>
+          <li><b>Interlock Alarm:</b> پین‌های Interlock باید به‌صورت حلقه بسته متصل باشند</li>
+          <li><b>High/Low Temperature Alarm:</b> دمای داخلی خارج از محدوده؛ چیلر و فیلتر آب را بررسی کنید</li>
+          <li><b>Laser Off Alarm هنگام روشن‌شدن:</b> دکمه LASER قبل از روشن شدن فشرده بوده؛ خاموش/روشن مجدد کنید</li>
+          <li><b>قفل خودکار پس از دو خطای پیاپی:</b> نیاز به تماس با پشتیبانی Raycus</li>
+          <li><b>گرفتگی فیلتر ورودی آب:</b> علت مستقیم آلارم دبی یا دمای بالا</li>
+        </ul>
+      </div>
+
+      <div class="brand-block">
+        <h5>MAX Photonics و JPT</h5>
+        <ul>
+          <li>ساختار مشابه IPG/Raycus: هشدار دما، Interlock، دبی آب کم، بازتاب بالا، خطای ارتباطی</li>
+          <li>در MAX کد خطا معمولاً عددی روی پنل یا در Cypcut نمایش داده می‌شود</li>
+          <li>در JPT (مارکینگ) خطاهای رایج: «Temperature too high» و «Laser: Reserved» — معمولاً قطعی/نویز کابل ارتباطی</li>
+        </ul>
+      </div>
+
+      <div class="brand-block">
+        <h5>CypCut / FSCUT (Friendess‑Bochu)</h5>
+        <ul>
+          <li><b>BCS100 Network Timeout:</b> ارتباط شبکه بین کارت اصلی و BCS100 قطع؛ IP و کابل شبکه را بررسی کنید</li>
+          <li><b>Capacity is 0:</b> سطح خازنی تشخیص داده نمی‌شود؛ اتصال ارت هد، نازل کثیف، یا تماس ورق با بدنه را بررسی کنید</li>
+          <li><b>Z+/Z- Sensor Enable Alarm:</b> سنسور حد محور Z کثیف یا معیوب</li>
+          <li><b>Following Error زیاد:</b> ورق تاب‌دار، سرعت بالا یا مشکل مکانیکی Z</li>
+          <li><b>Servo Alarm:</b> خطای درایور سروو گزارش‌شده به کنترلر</li>
+          <li><b>Dual‑drive Excessive Deviation:</b> عدم هماهنگی دو موتور Y؛ نیاز به Gantry Synchronization</li>
+          <li><b>Motor Runaway Check Fail:</b> جهت چرخش موتور با انکودر همخوانی ندارد</li>
+        </ul>
+      </div>
+
+      <div class="card ok">
+        <span class="tag">منابع رسمی</span>
+        <p>ipgphotonics.com · en.raycuslaser.com · maxphotonics.com · jptlaser.com · fscut.com / bochu.com</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  این مستند مرجع فنی جامع است. برای عیب‌یابی عملی، همیشه دفترچه راهنمای اختصاصی برند منبع لیزر، کنترلر و چیلر دستگاه خود را نیز کنار این راهنما بررسی کنید.
+</footer>
+
+<button class="fab" id="top" title="بازگشت به بالا">↑</button>
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var toc = document.getElementById('toc');
+  var q = document.getElementById('q');
+  var mainEl = document.getElementById('main');
+
+  // Build TOC chips
+  sections.forEach(function(sec){
+    var a = document.createElement('a');
+    a.href = '#' + sec.id;
+    a.textContent = sec.getAttribute('data-title');
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      sec.classList.add('open');
+      sec.scrollIntoView({behavior:'smooth', block:'start'});
+      highlightToc(sec.id);
+    });
+    toc.appendChild(a);
+  });
+
+  function highlightToc(id){
+    Array.prototype.forEach.call(toc.children, function(el){
+      el.classList.toggle('active', el.getAttribute('href') === '#' + id);
+    });
+  }
+
+  // Accordion toggle
+  sections.forEach(function(sec){
+    var head = sec.querySelector('.sec-head');
+    head.addEventListener('click', function(){
+      sec.classList.toggle('open');
+      if(sec.classList.contains('open')) highlightToc(sec.id);
+    });
+  });
+
+  // Open first section by default
+  sections[0].classList.add('open');
+  highlightToc(sections[0].id);
+
+  // Search / filter
+  function clearMarks(){
+    mainEl.querySelectorAll('mark').forEach(function(m){
+      var parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    });
+  }
+
+  function markText(node, term){
+    if(node.nodeType === 3){
+      var idx = node.textContent.toLowerCase().indexOf(term);
+      if(idx >= 0){
+        var span = document.createElement('span');
+        var text = node.textContent;
+        span.innerHTML = text.substring(0, idx) + '<mark>' + text.substring(idx, idx+term.length) + '</mark>' + text.substring(idx+term.length);
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if(node.nodeType === 1 && node.tagName !== 'MARK'){
+      Array.prototype.slice.call(node.childNodes).forEach(function(child){ markText(child, term); });
+    }
+  }
+
+  q.addEventListener('input', function(){
+    var term = q.value.trim().toLowerCase();
+    clearMarks();
+    var removeExisting = document.querySelector('.no-results');
+    if(removeExisting) removeExisting.remove();
+
+    if(!term){
+      sections.forEach(function(sec, i){
+        sec.classList.remove('hidden');
+        sec.classList.toggle('open', i === 0);
+      });
+      highlightToc(sections[0].id);
+      return;
+    }
+
+    var anyVisible = false;
+    sections.forEach(function(sec){
+      var text = sec.textContent.toLowerCase();
+      var matches = text.indexOf(term) !== -1;
+      sec.classList.toggle('hidden', !matches);
+      if(matches){
+        anyVisible = true;
+        sec.classList.add('open');
+        markText(sec.querySelector('.sec-body'), term);
+      }
+    });
+
+    if(!anyVisible){
+      var msg = document.createElement('div');
+      msg.className = 'no-results';
+      msg.textContent = 'نتیجه‌ای برای «' + q.value + '» یافت نشد.';
+      mainEl.appendChild(msg);
+    }
+  });
+
+  // Back to top
+  document.getElementById('top').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>
